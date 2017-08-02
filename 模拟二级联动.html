@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<select id="first">
+		<option value="A">A</option>
+		<option value="B">B</option>
+		<option value="C">C</option>
+	</select>
+	<select id="second"></select>
+</body>
+<script>
+	var first = document.getElementById('first');
+	var second = document.getElementById('second');
+
+	//创建自选项构造器
+	function options(content,val){
+		var opt = document.createElement('option');
+		opt.innerText = content;
+		opt.val = val;
+		second.options.add(opt);
+	}
+
+	var arr = [1,2,3,4,5];
+	var arr2 = [6,7,8,9,0];
+	var arr3 = [1,3,5,7,9];
+	
+	
+	first.onchange = optSecond;
+	optSecond();
+	function optSecond(){
+		//清空子选项
+		(function(){
+			for(var i =0;i<second.options.length;i++){
+				second.options.length = 0;
+			}
+		})();
+		for(var i = 0;i<arr.length;i++){
+			if(first.value == 'A'){
+				options(arr[i],arr[i]);
+			}
+			else if(first.value == 'B'){
+				options(arr2[i],arr2[i]);
+			}
+			else if(first.value == 'C'){
+				options(arr3[i],arr3[i]);
+			}
+		}
+
+	}
+	
+	
+</script>
+</html>
