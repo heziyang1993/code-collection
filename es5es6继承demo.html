@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+	//es5
+	function Person(){
+		this.a = 1;
+		this.b = 2;
+		this.c = 3;
+		this.d = 4;
+	}
+	Person.prototype.learn = function(){
+		console.log(111)
+	}
+	var a = new Person();
+	function Person2(){
+		//this继承Person
+		Person.call(this)
+	}
+	//继承
+	Person2.prototype = Object.create(Person.prototype)
+	var b =new Person2();
+	b.learn()
+	console.log(b)
+
+	//es6
+	class Person3 {
+		constructor(){
+			this.name = 'yang',
+			this.age = 24
+		}
+		hobby(){
+			console.log(222)
+		}
+	}
+	//实例化
+	var p1 = new Person3();
+
+	class Person4 extends Person3 {
+		constructor() {
+			//继承
+			super();
+		}
+	}
+	new Person4().hobby()
+	</script>
+</body>
+</html>
