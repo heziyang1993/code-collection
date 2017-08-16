@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="vue.js"></script>
+	</head>
+	<body>
+		<div id="demo"></div>
+		
+	</body>
+	<script>
+		new Vue({
+			el:'#demo',
+			template:`
+					<input type="checkbox" v-model='isClear'>
+					//重点：定义name是一个数组，当点击单个选项时，将每个checkbox的value值push进这个数组就可以选中当前checkbox
+					<input type="checkbox" v-model='name' v-for='ele in list' :value="ele"/ >
+					`,
+			data:{
+				//list是所有有checkbox选项的物品
+				list:[1,2,3,4,5,6],
+				name:[],
+				length:0,
+				isClear:false
+			},
+			watch: {
+	 			// 监听全选键
+	 			isClear(val) {
+	 				//当全选时候
+	 				if(this.isClear) {
+	 					this.name = [];
+	 					//将所有物品push进name
+	 					for(var i = 0;i<this.list.length;i++) {
+	 						this.name.push(this.list[i]);
+	 					}
+	 					this.isClear = true;
+	 				}else {
+	 					//当再次点击的时候，==false的时候，清空name实现全不选
+	 					if(this.name.length == this.list.length) {
+						// 为什么要为空？因为this.name.length == this.lists.length时是全选，所以再次点击必须清空
+							this.name = [];
+						} else {
+							//其他时候保存状态(可忽略)
+							this.name = this.name;
+						}
+	 				}
+	 				this.isClear = false;
+				},
+				// 监听单选键
+				name(){
+					//单选键全部没有选中全选键不选
+					if(this.name.length == 0) {
+						this.isClear = false
+					
+					} else if(this.name.length == this.list.length) {
+						//全选中的时候全选键选中
+						this.isClear = true
+					} else {
+						//其余时候全选键不选
+						this.isClear = false
+					}
+				}
+			},
+		})
+	</script>
+</html>
