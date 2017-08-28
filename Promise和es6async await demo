@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="{CHARSET}">
+		<title></title>
+	</head>
+
+	<body>
+	</body>
+	<script>
+//		;(function() {
+//			function a() {
+//				return new Promise(function(resolve, reject) {
+//					setTimeout(function() {
+//						resolve(console.log('a'));
+//					}, 2000)
+//				})
+//			}
+//
+//			function b() {
+//				return new Promise(function(resolve, reject) {
+//					setTimeout(function() {
+//						resolve(console.log('b'));
+//
+//					}, 1000)
+//				})
+//			}
+//
+//			function c() {
+//				setTimeout(function() {
+//					console.log('c')
+//				}, 1000)
+//			}
+//			a().then(b).then(c)
+//		})();
+
+
+    //await后面跟promise实例，await是等待promise有结果才会执行下一步，否则不会执行下一步
+		async function timeOut(time){
+			return new Promise(function(resolve,reject){
+				setTimeout(function(){
+					resolve();
+				},time)
+			})
+		}
+		;(async function(){
+			await timeOut(3000)
+			console.log('a')
+			console.log('b')
+		})();
+		
+    //resolve的作用是保存最终信息，并且有resolve才会同步执行
+		function aa(){
+			return new Promise(function(resolve,reject){
+				setTimeout(function(){
+					resolve();
+				},2000)
+			})
+		}
+		function bb(){
+			console.log('bb')
+		}
+		aa().then(bb)
+	</script>
+
+</html>
