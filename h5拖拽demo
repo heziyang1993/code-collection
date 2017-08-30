@@ -1,0 +1,74 @@
+`
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+		<style>
+			.box {
+				width: 500px;
+				height: 500px;
+				padding: 30px;
+				border: 1px solid #eee;
+				overflow: hidden;
+			}
+			
+			.left,
+			.right {
+				width: 240px;
+				height: 100%;
+				float: left;
+			}
+			
+			.left {
+				margin-right: 20px;
+			}
+			.demo1 {background: red;height: 100%;width: 100%;}
+			.demo2 {background: blue;height: 100%;width: 100%;}
+		</style>
+	</head>
+
+	<body>
+		<div class="box">
+			<div class="left" draggable="true" ondrop="drop(event,this)" ondragover="allowDrop(event)" ondragstart="drag(event,this)">
+				<div class="demo2"></div>
+			</div>
+			<div class="right" draggable="true" draggable="true" ondrop="drop(event,this)" ondragover="allowDrop(event)" ondragstart="drag(event,this)">
+				<div class="demo1"></div>
+			</div>
+		</div>
+		<script>
+			function allowDrop(ev) {
+				ev.preventDefault();
+			}
+			//ev是dragelement，divDom是拖动的元素本身的dom
+			var startDom = null;
+			function drag(ev,divDom) {
+				//要交换的内容就是innerHTML
+				ev.dataTransfer.setData("text/html", divDom.innerHTML);
+				console.log(divDom.innerHTML)
+				console.log(ev);
+				console.log(divDom)
+				//保存拖动点的信息
+				startDom = divDom;
+				
+			}
+
+			function drop(ev,divDom) {
+				ev.preventDefault();
+				if(divDom !== startDom) {
+					//位置互换，拖动点的内容等于拖放点的内容
+					startDom.innerHTML = divDom.innerHTML;
+					//提取交换的内容，拖放点的内容就是拖动点的内容
+					divDom.innerHTML=ev.dataTransfer.getData("text/html");  
+					console.log(ev.target.offsetLeft)
+				}
+				
+			}
+		</script>
+	</body>
+
+</html>
