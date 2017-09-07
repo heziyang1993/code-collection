@@ -1,0 +1,14 @@
+app.post('/searchGoods', function(request, response) {
+	response.append('Access-Control-Allow-Origin', '*');
+	request({
+		url:'url',
+		method:'POST',
+		body:JSON.stringify({
+			period_id:1
+		})
+	},function(error,res,body){
+		if(!error && res.status == 200) {
+			console.log(res)
+		}
+	})
+})
