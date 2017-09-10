@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <form id="domId">
+      <input type='file' id="inputfile"/>
+    </form>
+  </body>
+</html>
+<script>
+//$domId是form标签id
+  var formData = new FormData($domId[0]);
+  //module是自定义属性，后面是属性值，参数以append的形式加入payload
+			formData.append('module',$(this.target).data('module'));
+      //input[file].files[0]是上传的图片信息,下面的$inputFile未file的id
+			formData.append('file',$inputFile[0].files[0]);
+			//获取返回的链接
+			$.ajax({
+				url: 'http://localhost:9000/api/admin/images.upload',
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				async:false,
+				success: function(res) {
+					
+					obj.path = res.data[0].path;
+					
+				}
+			})
+</script>
