@@ -1,0 +1,12 @@
+var a = [1, 2, 3, 4, 5];
+    var b = [2, 3, 4, 5, 6];
+    for(var i = 0; i < a.length; i++) {
+
+      var obj1 = a.find(item => {
+
+          return item === b[i]
+      })
+    console.log(obj1) // 2,3,4,5,undfined
+      
+    }
+    //find+箭头函数会返回对应的值，find(function(item,idx,arr){return item})
