@@ -1,99 +1,136 @@
+### 上传文件demo
+
+```
+// 前端写法
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <form id="upload">
+    <input type="file" name="test" multiple="multiple">
+    
+  </form>
+  <button class="upload">上传文件</button>
+</body>
+<script src="jquery.js"></script>
+<script>
+  $('.upload').on('click',function(){
+    $.ajax({
+      url: 'http://localhost:90/upload',
+      type: 'POST',
+      data: new FormData($('#upload')[0]),
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        console.log(data)
+      }
+    })
+  })
+</script>
+</html>
+```
+```
+// 后端写法
 /**
  * [upload description]
  * 此代码需要安装npm express multer 模块
  * @param  {[String]} fileUrl         [文件夹路径]
  * @param  {[String]} route           [路由]
  * @param  {[String]} documentMessage [文件信息,此值必须等于input file的name]
- * @param  {[Number]} port 			  [端口号 0~65535]
+ * @param  {[Number]} port        [端口号 0~65535]
  * example uploads('./place','/upload','test',3000);
  */
 uploads('./place','/upload','upload',3000);
 function uploads(fileUrl,route,documentMessage,port){
-	//引入express框架
-	var express = require("express");
-	var app = express();
-	app.listen(port);
+  //引入express框架
+  var express = require("express");
+  var app = express();
+  app.listen(port);
 
-	var multer = require('multer');
-	/*var upload = multer({
-		//如果用这种方法上传，要手动添加文明名后缀
-		dest: 'uploads/'
-	})*/
-	var storage = multer.diskStorage({
-		//设置上传后文件路径，uploads文件夹会自动创建。
-		destination: function(req, file, cb) {
-			cb(null, fileUrl);
-		},
-		//给上传文件重命名，获取添加后缀名
-		filename: function(req, file, cb) {
-			var fileFormat = (file.originalname).split(".");
-			//给图片加上时间戳格式防止重名名
-			//比如把 abc.jpg图片切割为数组[abc,jpg],然后用数组长度-1来获取后缀名
-			cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
-		}
-	});
-	var upload = multer({
-		storage: storage
-	});
+  var multer = require('multer');
+  /*var upload = multer({
+    //如果用这种方法上传，要手动添加文明名后缀
+    dest: 'uploads/'
+  })*/
+  var storage = multer.diskStorage({
+    //设置上传后文件路径，uploads文件夹会自动创建。
+    destination: function(req, file, cb) {
+      cb(null, fileUrl);
+    },
+    //给上传文件重命名，获取添加后缀名
+    filename: function(req, file, cb) {
+      var fileFormat = (file.originalname).split(".");
+      //给图片加上时间戳格式防止重名名
+      //比如把 abc.jpg图片切割为数组[abc,jpg],然后用数组长度-1来获取后缀名
+      cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    }
+  });
+  var upload = multer({
+    storage: storage
+  });
 
-	//单图上传
-	app.post(route, upload.single(documentMessage) ,function(req, res, next) {
-		res.append("Access-Control-Allow-Origin","*");
-		// console.log(req.file)
-		// console.log('文件类型：%s', req.file.mimetype);
-		// console.log('原始文件名：%s', req.file.originalname);
-		// console.log((req.file.originalname).split("."))
-		// console.log('文件大小：%s', req.file.size);
-		// console.log('文件保存路径：%s', req.file.path);
-		res.send('已经成功上传');
-	});
+  //单图上传
+  app.post(route, upload.single(documentMessage) ,function(req, res, next) {
+    res.append("Access-Control-Allow-Origin","*");
+    // console.log(req.file)
+    // console.log('文件类型：%s', req.file.mimetype);
+    // console.log('原始文件名：%s', req.file.originalname);
+    // console.log((req.file.originalname).split("."))
+    // console.log('文件大小：%s', req.file.size);
+    // console.log('文件保存路径：%s', req.file.path);
+    res.send('已经成功上传');
+  });
 }
 
 
 
 //vue axios上传头像方法
 uploadHeadpic(event){
-	let formData = new FormData();
-	formData.append("file",event.target.files[0]);
-	formData.append("username",this.username);
-	let config = {
-		headers:{
-			"Content-Type":"multipart/form-data"
-		}
-	};
-	this.$ajax.post("http://localhost:6789/headpic",formData,config).then((data)=>{
-		this.headpicSrc = data.data;
-	},(err)=>{
-		console.log(err);
-	})
+  let formData = new FormData();
+  formData.append("file",event.target.files[0]);
+  formData.append("username",this.username);
+  let config = {
+    headers:{
+      "Content-Type":"multipart/form-data"
+    }
+  };
+  this.$ajax.post("http://localhost:6789/headpic",formData,config).then((data)=>{
+    this.headpicSrc = data.data;
+  },(err)=>{
+    console.log(err);
+  })
 }
 
 //fs模块删除已经上传的图片
 //设置路由
 app.post("/headpic",upload.any(),function(req,res){
-	res.append("Access-Control-Allow-Origin","*");
-	var data = req.body;
-	//删除原来的头像
-	connection.query("SELECT head_pic FROM user_info WHERE username ='" + data.username + "'",function(err,results,fields){
-		//如头像为默认头像则不删除
-		if(results[0].head_pic != "uploads/mine-headerpic.jpg"){
+  res.append("Access-Control-Allow-Origin","*");
+  var data = req.body;
+  //删除原来的头像
+  connection.query("SELECT head_pic FROM user_info WHERE username ='" + data.username + "'",function(err,results,fields){
+    //如头像为默认头像则不删除
+    if(results[0].head_pic != "uploads/mine-headerpic.jpg"){
 
-			//删除头像的图片
-			fs.unlink(results[0].head_pic, (err)=>{
-				if(err) throw err;
-				console.log("删除成功");
-			});
-		}
-		
-		//将新头像路径存入数据库
-		//使用正则替换\符号避免转义
+      //删除头像的图片
+      fs.unlink(results[0].head_pic, (err)=>{
+        if(err) throw err;
+        console.log("删除成功");
+      });
+    }
+    
+    //将新头像路径存入数据库
+    //使用正则替换\符号避免转义
 
-		var reg = new RegExp(/\\/g);
+    var reg = new RegExp(/\\/g);
 
-		req.files[0].path = req.files[0].path.replace(reg,"/");
-		console.log(req.files[0].path);
-		connection.query("UPDATE user_info SET head_pic='" + req.files[0].path + "' WHERE username ='" + data.username + "'");
-		//将新头像路径返回前端
-		res.end(req.files[0].path);
-	})
+    req.files[0].path = req.files[0].path.replace(reg,"/");
+    console.log(req.files[0].path);
+    connection.query("UPDATE user_info SET head_pic='" + req.files[0].path + "' WHERE username ='" + data.username + "'");
+    //将新头像路径返回前端
+    res.end(req.files[0].path);
+  })
 })
+```
