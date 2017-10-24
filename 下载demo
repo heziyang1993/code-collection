@@ -1,0 +1,30 @@
+```
+http.get(‘网址’，function(res){
+  var data = ‘’;
+	res.on(‘data’,function(chunk){
+  data += chunk;
+})
+res.on(‘end’,function(){
+//res就是返回的流数据，整段html结构，然后按照常规方法获取标签处理数据
+  var imgArr = [];
+//把爬到的地址链接push进imgArr
+imgArr.push(‘链接’)
+//执行下载函数
+	down(imgArr);
+})
+})
+var i = 0;
+function down(imgArr){
+var length = imgArr.length;
+http.get(imgArr[i],function(res){
+	var writeStream = fs.createWriteStream('./'+i+Date.now()+'.jpg');
+	//递归
+	if(i<=length){
+	 i++;
+	down(imgArr);
+	 console.log('当前'+ i + '总共' + length)
+	}
+	res.pipe(writeStream);
+	})
+}
+```
