@@ -10,3 +10,8 @@ class test {
     console.log(new test().name)
     console.log(new test().plus(1, 2))
 ```
+```
+// set去重
+var set = new Set([1, 2, 3, 4, 4]);
+[...set] // [1,2,3,4]
+```
