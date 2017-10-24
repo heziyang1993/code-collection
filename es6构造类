@@ -1,0 +1,12 @@
+```
+class test {
+      constructor () {
+        this.name = 'yang'
+      }
+      plus (a, b) {
+        return a + b
+      }
+    }
+    console.log(new test().name)
+    console.log(new test().plus(1, 2))
+```
