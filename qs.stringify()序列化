@@ -1,0 +1,7 @@
+qs库将对象转化成请求形式，用于axios请求时将参数转化
+var a = {name:'hehe',age:10};
+qs.stringify序列化结果如下
+name=hehe&age=10
+
+而JSON.stringify序列化结果如下：
+"{"a":"hehe","age":10}"
