@@ -1,0 +1,66 @@
+<template>
+	<div class="className" @dblclick="showConf" @mousedown="sendItem">
+    <template v-if="item.conf && item.conf.items.length !== 0">
+        <el-carousel height="140px" indicator-position="none">
+          <el-carousel-item v-for="(items, $index) in item.conf.items" :key="$index">
+            <img :src="items.pic" :title="item.title"/>
+          </el-carousel-item>
+        </el-carousel>
+    </template>
+    <template v-else>
+      <img src="../../assets/module/banner_demo.png"/>
+    </template>
+	</div>
+</template>
+<script>
+  export default{
+    props: ['item'],
+    data () {
+      return {
+        timer: null
+      }
+    },
+    methods: {
+      sendItem () {
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          if (!this.item.module_id) return false
+          this.$store.dispatch('currentConfBlock', this.item)
+          console.log(333)
+        }, 200)
+      },
+      showConf () {
+        if (!this.item.module_id) return false
+        clearTimeout(this.timer)
+        this.$store.dispatch('currentConfBlock', this.item)
+        this.$store.dispatch('isShowConf', 2)
+        this.$store.dispatch('dialogVisible', true)
+        if (this.item.conf && this.item.conf !== '') {
+          this.$store.dispatch('bannerList', this.item.conf.items)
+        } else {
+          this.$store.dispatch('bannerList', [])
+        }
+      }
+    }
+  }
+</script>
+<style scoped="scoped">
+    .banner{
+      width: 100%;
+    }
+   .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
+</style>
