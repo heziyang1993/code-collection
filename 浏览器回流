@@ -1,0 +1,63 @@
+### 触发回流
+
+请求向浏览器请求一些 style信息的时候，就会让浏览器flush队列，比如：
+```
+offsetTop, offsetLeft, offsetWidth, offsetHeight
+scrollTop/Left/Width/Height
+clientTop/Left/Width/Height
+width,height
+请求了getComputedStyle(), 或者 IE的 currentStyle
+当你请求上面的一些属性的时候，浏览器为了给你最精确的值，需要flush队列，因为队列中可能会有影响到这些值的操作。即使你获取元素的布局和样式信息跟最近发生或改变的布局信息无关，浏览器都会强行刷新渲染队列。
+
+### 优化
+
+ ```
+1直接改变className，如果动态改变样式，则使用cssText（考虑没有优化的浏览器）
+js 代码:
+// 不好的写法
+var left = 1;
+var top = 1;
+el.style.left = left + "px";
+el.style.top = top + "px";// 比较好的写法
+el.className += " className1";
+
+// 比较好的写法
+el.style.cssText += ";
+left: " + left + "px;
+top: " + top + "px;";
+```
+```
+2. 让要操作的元素进行”离线处理”，处理完后一起更新
+
+a) 使用DocumentFragment进行缓存操作,引发一次回流和重绘；
+b) 使用display:none技术，只引发两次回流和重绘；
+c) 使用cloneNode(true or false) 和 replaceChild 技术，引发一次回流和重绘；
+```
+```
+3.不要经常访问会引起浏览器flush队列的属性，如果你确实要访问，利用缓存
+
+js 代码:
+// 别这样写，大哥
+for(循环) {
+el.style.left = el.offsetLeft + 5 + "px";
+el.style.top = el.offsetTop + 5 + "px";
+}
+
+// 这样写好点
+var left = el.offsetLeft,
+top = el.offsetTop,
+s = el.style;
+for (循环) {
+left += 10;
+top += 10;
+s.left = left + "px";
+s.top = top + "px";
+}
+```
+```
+4. 让元素脱离动画流，减少回流的Render Tree的规模
+
+js 代码:
+$("#block1").animate({left:50});
+$("#block2").animate({marginLeft:50});
+```
