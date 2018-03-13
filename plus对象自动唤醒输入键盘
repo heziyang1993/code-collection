@@ -1,0 +1,24 @@
+if (vnode.context.ua.ios) {
+          plusready(() => {
+            setTimeout(() => {
+              let plus = window.plus.webview.currentWebview().nativeInstanceObject()
+              plus.plusCallMethod({'setKeyboardDisplayRequiresUserAction': false})
+              el.focus()
+            }, 300)
+          })
+        } else if (vnode.context.ua.android) {
+          plusready(() => {
+            setTimeout(() => {
+              // 在执行的时候需要让当前webview获取焦点
+              let plus = window.plus.android.currentWebview()
+              window.plus.android.importClass(plus)
+              plus.requestFocus()
+              let Context = window.plus.android.importClass('android.content.Context')
+              let InputMethodManager = window.plus.android.importClass('android.view.inputmethod.InputMethodManager')
+              let main = window.plus.android.runtimeMainActivity()
+              let imm = main.getSystemService(Context.INPUT_METHOD_SERVICE)
+              imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED)
+              el.focus()
+            }, 300)
+          })
+        }
