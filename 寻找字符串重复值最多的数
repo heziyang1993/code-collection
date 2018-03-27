@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script>
+	  let data = 'aaabbbbcccddddeeeffggggghhhhhhiiiiiiiii'
+	  let temp = data.split('')
+	  let obj = {}
+	  for (let i = 0; i < temp.length; i++) {
+	    console.log(temp[i])
+	    if (obj[temp[i]]) {
+	      obj[temp[i]]++
+	    } else {
+	      obj[temp[i]] = 1
+	    }
+	  }
+	  let num  = 0
+	  for (let ele in obj) {
+	    if (obj[ele] > num) {
+	      num = obj[ele]
+	    }
+	  }
+	</script>
+</html>
