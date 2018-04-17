@@ -1,0 +1,16 @@
+let suppliers = [{id: 1}, {id: 2}, {id: 3}, {id: 4}]
+let selectedSuppliers = [{id: 2}, {id: 3}]
+let newSup = []
+for (let i = 0; i < suppliers.length; i++) {
+  let hasSup = false
+  for (let j = 0; j < selectedSuppliers.length; j++) {
+    if (suppliers[i].id === selectedSuppliers[j].id) {
+      hasSup = true
+      break
+    }
+  }
+  if (!hasSup) {
+    newSup.push(suppliers[i])
+  }
+}
+// newSup => ([{id: 1}, {id: 4}])
