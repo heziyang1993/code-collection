@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    <title></title>
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+      }
+      .box {
+        width: 100%;
+        position: relative;
+        height: 100%;
+      }
+      .water {
+        width: 200px;
+        position: absolute;
+      }
+    </style>
+	</head>
+	<body>
+    <div class="box">
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+      <div class="water"></div>
+    </div>
+	</body>
+	<script>
+    // 不断寻找top值最少的item来排列
+    function randomColor () {
+      var r = Math.random() * 255 + 1
+      var g = Math.random() * 255 + 1
+      var b = Math.random() * 255 + 1
+      return `rgb(${r}, ${g}, ${b})`
+    }
+    var div = document.getElementsByClassName('water')
+    var col =Math.floor(document.body.clientWidth / div[0].offsetWidth)
+    var arrHeight = []
+    for (let i = 0; i < div.length; i++) {
+      div[i].style.height = Math.random() * 200 + 'px'
+      div[i].style.backgroundColor = randomColor()
+      var itemWidth = div[0].offsetWidth
+      // 第一行
+      if (i < col) {
+        div[i].style.top = 0
+        div[i].style.left = i * itemWidth + 'px'
+        // 将第一行的物体高度放到数组
+        arrHeight[i] = div[i].offsetHeight
+      } else {
+        // 其他行
+        // 找到最小高度
+        var minHeight = Math.min.apply(null, arrHeight)
+        // 找到对应下标
+        var minIdx = arrHeight.indexOf(minHeight)
+        console.log(minHeight, minIdx)
+        div[i].style.left = minIdx * itemWidth + 'px'
+        div[i].style.top = minHeight + 'px'
+        // 更新最小值 = 最小高度 + item高度
+        arrHeight[minIdx] += div[i].offsetHeight
+      }
+    }
+	</script>
+</html>
