@@ -1,0 +1,18 @@
+// 扁平化数组
+function deepFlatten (arr) {
+  let newArr = [].concat(...arr.map(item => Array.isArray(item) ? deepFlatten(item) : item))
+  return newArr
+}
+let arr = [1, [2, 3], [[4, 5], 6]] // [1, 2, 3, 4, 5, 6]
+
+// 初始化数组
+function initializeArray (length) {
+  return Array.from({length: length}).map(item => [])
+}
+initializeArray(10) // [[] * 10]
+
+// 对象拼接url
+function joinUrl (obj) {
+  return Object.entries(obj).map(item => `${item[0]}=${item[1]}`).join('&')
+}
+joinUrl({name: 'yang', age: 18}) // name=yang&age=18
