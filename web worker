@@ -1,0 +1,21 @@
+// 父js
+let work = new Worker('worker.js')
+let box = document.getElementById('box')
+work.postMessage('message') // 向子进程传递信息
+work.onmessage = function (event) { // 接受返回信息
+  console.log(event.data)
+}
+
+// work.js
+// 子进程可做复杂运算，这样能避免阻塞父进程
+var i=0;
+onmessage = function (m) { // 接受传递信息
+  console.log(m.data)
+}
+function timedCount() {
+  i=i+1;
+  postMessage(i); // 向父进程发送信息
+  //setTimeout(timedCount,500);
+}
+
+timedCount();
