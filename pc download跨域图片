@@ -1,0 +1,22 @@
+download (data, filename, mime) {
+  // pc端浏览器可行
+  var type = 'png' // 你想要什么图片格式 就选什么吧
+  var image = new Image()
+  image.setAttribute('crossOrigin', 'Anonymous')
+  image.src = data
+  image.onload = () => {
+    var ctx = document.createElement('canvas')
+    ctx.width = image.width
+    ctx.height = image.height
+    ctx.getContext('2d').drawImage(image, 0, 0)
+    var imgData = ctx.toDataURL(type)
+    console.log(imgData)
+    // 2.0 将mime-type改为image/octet-stream,强制让浏览器下载
+    imgData = imgData.replace('image/jpg', 'image/octet-stream')
+    // 3.0 将图片保存到本地
+    var s = document.createElement('a')
+    s.href = imgData
+    s.download = filename
+    s.click()
+  }
+}
