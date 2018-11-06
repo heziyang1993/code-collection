@@ -1,0 +1,104 @@
+### 纯css
+<html>
+	<head>
+		<title></title>
+		<meta charset="utf-8"/>
+		<style type="text/css">
+			li {
+				float: left;
+				width: 100px;
+				cursor: pointer;
+				text-align: center;
+				list-style: none;
+				position: relative;
+
+			}
+			li::after {
+				content: '';
+				position: absolute;
+				bottom: 0;
+				left: 100%;
+				border-bottom: 2px solid orange;
+				display: block;
+				width: 0;
+				transition: all 0.5s;
+			}
+			li:hover::after {
+				width: 100%;
+				left: 0;
+			}
+			li:hover ~ li::after {
+				left: 0
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul>
+				<li>我是tab1</li>
+				<li>我是tab2</li>
+				<li>我是tab3</li>
+			</ul>
+		</div>
+	</body>
+</html>
+
+### JS
+<html>
+	<head>
+		<title></title>
+		<meta charset="utf-8"/>
+		<style type="text/css">
+			ul {
+				position: relative;
+				overflow: hidden;
+				padding: 0;
+				margin: 0;
+			}
+			li {
+				float: left;
+				width: 100px;
+				cursor: pointer;
+				text-align: center;
+				list-style: none;
+			}
+			#box {
+				position: relative;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul>
+				<li>我是tab1</li>
+				<li>我是tab2</li>
+				<li>我是tab3</li>
+			</ul>
+			<div id="nav_line"></div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		let li = document.querySelectorAll('li')
+		for (let i = 0; i < li.length; i++) {
+			li[i].onclick = function (e) {
+				let span = document.querySelector('#nav_line')
+				span.style.display = 'block'
+				span.style.width = li[i].offsetWidth + 'px'
+				span.style.height = 2 + 'px'
+				span.style.background = 'orange'
+				span.style.position = 'absolute'
+				span.style.left = 0 + li[i].offsetLeft + 'px'
+				span.style.bottom = 0
+				span.style.transition = 'left 0.5s'
+				console.log(li[i].childNodes[1])
+				for (let j = 0; j < li.length; j++) {
+					if (j !== i) {
+						if (li[j].childNodes[1]) {
+							li[j].removeChild(li[j].childNodes[1])
+						}
+					}
+				}
+			}.bind(i)
+		}
+	</script>
+</html>
