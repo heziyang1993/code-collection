@@ -1,0 +1,33 @@
+<script>
+  function co (generator) {
+    let gen = generator()
+    var next = function (data) {
+      // 第一次进来
+      var result = gen.next(data)
+      if (result.done) return
+      if (result.value instanceof Promise) {
+        result.value.then((res) => {
+          next(res)
+        }).catch(err => {
+          next(err)
+        })
+      } else {
+        next()
+      }
+    }
+    next()
+  }
+  co(function* () {
+    // 第一次next()的时候，执行yield后面的表达式，并不会赋值给test
+    // 第二次递归到next的时候，promise返回了res，并且当参数传给了next，赋值给test
+    var test = yield new Promise(resolve => {
+        setTimeout(() => {
+          resolve(123123)
+        }, 1000)
+      })
+    console.log(test)
+  })
+  // 123
+  // 对于  var foo = yield expression 语句，yield 左侧变量 foo 的值将在下一次调用 next() 方法时获得，并且等于调用时 next() 方法的参数
+
+</script>
